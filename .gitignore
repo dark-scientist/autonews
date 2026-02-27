@@ -1,0 +1,46 @@
+# HTML files
+*.html
+auto_news_intelligence/input/articles/articles/*.html
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+
+# Logs
+*.log
+download_log.txt
+pipeline_run.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# Large data files
+*.csv
+*.xlsx
+
+# Keep .gitkeep files
+!.gitkeep

@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Download HTML articles from URLs in 25_02_links.txt"""
+"""Download HTML articles from URLs in url_batches/all_links.txt"""
+
+import sys
+import os
+
+# Force UTF-8 encoding for Windows console
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 import requests
 import hashlib
@@ -18,7 +27,7 @@ def download_article(url, output_dir):
         
         # Skip if already exists
         if filepath.exists():
-            print(f"✓ Skip (exists): {filename}")
+            print(f"[SKIP] Already exists: {filename}")
             return True
         
         # Download with headers
@@ -32,12 +41,12 @@ def download_article(url, output_dir):
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(response.text)
         
-        print(f"✓ Downloaded: {filename}")
+        print(f"[OK] Downloaded: {filename}")
         time.sleep(0.3)  # Be polite
         return True
         
     except Exception as e:
-        print(f"✗ Failed {url}: {e}")
+        print(f"[FAIL] {url}: {e}")
         return False
 
 def main():
@@ -47,7 +56,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # Read URLs
-    with open(links_file, 'r') as f:
+    with open(links_file, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     
     urls = [line.strip() for line in lines if line.strip() and line.strip().startswith('http')]
@@ -61,7 +70,7 @@ def main():
         if download_article(url, output_dir):
             success += 1
     
-    print(f"\n✅ Downloaded {success}/{len(urls)} articles to {output_dir}")
+    print(f"\n[DONE] Downloaded {success}/{len(urls)} articles to {output_dir}")
 
 if __name__ == '__main__':
     main()

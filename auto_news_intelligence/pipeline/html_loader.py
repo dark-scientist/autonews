@@ -65,7 +65,7 @@ def load_html_articles(folder_path: str) -> list[dict]:
                     source = author_meta['content']
             
             # Extract published_at
-            published_at = datetime.now().isoformat()
+            published_at = None  # Don't default to current date
             pub_time = soup.find('meta', property='article:published_time')
             if pub_time and pub_time.get('content'):
                 published_at = pub_time['content']
@@ -73,6 +73,13 @@ def load_html_articles(folder_path: str) -> list[dict]:
                 time_tag = soup.find('time')
                 if time_tag and time_tag.get('datetime'):
                     published_at = time_tag['datetime']
+                else:
+                    # Try to find date in meta tags
+                    date_meta = soup.find('meta', attrs={'name': 'publishdate'}) or \
+                               soup.find('meta', attrs={'name': 'date'}) or \
+                               soup.find('meta', attrs={'property': 'article:modified_time'})
+                    if date_meta and date_meta.get('content'):
+                        published_at = date_meta['content']
             
             # Extract content using fallback chain
             content = None
